@@ -40,7 +40,7 @@ public class DBUtil {
         return connection;
     }
 
-    public static void close(Connection connection, Statement statement, ResultSet resultSet){
+    public static void close(ResultSet resultSet, Statement statement,Connection connection){
         if (resultSet!=null){
             try {
                 resultSet.close();

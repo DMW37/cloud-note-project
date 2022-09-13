@@ -16,6 +16,9 @@ import java.sql.SQLException;
  * @description:
  */
 public class UserDao {
+    /**
+     * logger: slf4j日志对象
+     */
     private Logger logger = LoggerFactory.getLogger(UserDao.class);
 
     /**
@@ -40,11 +43,14 @@ public class UserDao {
                 user.setUserId(resultSet.getInt("userId"));
                 user.setUname(resultSet.getString("uname"));
                 user.setUpwd(resultSet.getString("upwd"));
+                user.setNick(resultSet.getString("nick"));
+                user.setHead(resultSet.getString("head"));
+                user.setMood(resultSet.getString("mood"));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            DBUtil.close(connection, preparedStatement, resultSet);
+            DBUtil.close(resultSet, preparedStatement,connection);
         }
         return user;
     }

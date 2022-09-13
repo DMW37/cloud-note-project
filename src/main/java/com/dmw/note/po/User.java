@@ -1,17 +1,21 @@
 package com.dmw.note.po;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Data
 public class User {
-    private Integer userId; // 用户ID，主键
-    private String uname; // 用户名称
-    private String upwd; // 用户密码
-    private String nick; // 用户昵称
-    private String head; // 用户头像
-    private String mood; // 用户心情
+    /**
+     * 用户ID，主键
+     * 用户名称
+     * 用户密码
+     * 用户昵称
+     * 用户头像
+     * 用户心情
+     */
+    private Integer userId;
+    private String uname;
+    private String upwd;
+    private String nick;
+    private String head;
+    private String mood;
 }

@@ -5,13 +5,14 @@
   Time: 20:34
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--isELIgnored="false" 不忽略el表达式--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>云R记</title>
-    <link href="statics/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="statics/css/login.css" rel="stylesheet" type="text/css"/>
     <script src="statics/js/jquery-1.11.3.js" type=text/javascript></script>
     <script src="statics/js/util.js" type=text/javascript></script>
     <script src="statics/js/config.js" type=text/javascript></script>
@@ -34,12 +35,14 @@
                 <form action="user" method="post" id="loginForm">
                     <%-- actionName表示用户行为，通过这个参数可以在UserServlet中判断用户当前想要操作的功能 --%>
                     <input type="hidden" name="actionName" value="login"/>
-                    <input type="text" class="user yahei16" name="username" id="username" value=""/>
+                    <input type="text" class="user yahei16" name="username" id="username" value="${resultInfo.result.uname}"/>
                     <br/><br/>
-                    <input type="password" class="pwd yahei16" name="password" id="password" value=""/>
+                    <input type="text" class="pwd yahei16" name="password" id="password" value="${resultInfo.result.upwd}"/>
                     <br/><br/>
-                    <input name="" type="checkbox" value="" class="inputcheckbox" value="1"/>
-                    <label>记住我</label>&nbsp; &nbsp; <span id="msg" style="color: red;font-size: 12px"></span><br/><br/>
+                    <input name="rem" type="checkbox" class="inputcheckbox" value="1"/>
+                    <label>记住我</label>&nbsp; &nbsp;
+                        <%-- ${resultInfo.msg} 获取后台响应数据--%>
+                    <span id="msg" style="color: red;font-size: 12px">${resultInfo.msg}</span><br/><br/>
                     <input type="button" class="log jc yahei16" value="登 录" onclick="checkLogin()"/>&nbsp; &nbsp; &nbsp;
                     <input type="reset" value="取 消" class="reg jc yahei18"/>
                 </form>

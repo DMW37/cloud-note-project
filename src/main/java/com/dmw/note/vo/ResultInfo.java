@@ -6,8 +6,8 @@ package com.dmw.note.vo;
  * @description:
  */
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 封装返回结果的类
@@ -16,8 +16,11 @@ import lombok.Setter;
  *      提示信息
  *      返回的对象（字符串、JavaBean、集合、Map等）
  */
-@Getter
-@Setter
+@Data
+/**
+ * 链式编程
+ */
+@Accessors(chain = true)
 public class ResultInfo<T> {
 
     private Integer code; // 状态码 成功=1，失败=0

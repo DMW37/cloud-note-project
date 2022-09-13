@@ -13,6 +13,6 @@ public class DBUtilTest {
     @Test
     public void testGetConection() {
         Connection connection = DBUtil.getConnection();
-        DBUtil.close(connection, null, null);
+        DBUtil.close(null, null, connection);
     }
 }
