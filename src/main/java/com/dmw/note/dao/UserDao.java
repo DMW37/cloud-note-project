@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: 邓明维
@@ -21,12 +23,21 @@ public class UserDao {
      */
     private Logger logger = LoggerFactory.getLogger(UserDao.class);
 
+    public User queryUserByName(String username) {
+        String sql = "select userId,uname,upwd,nick,head,mood from tb_user where uname =?";
+        List<Object> params = new ArrayList<>();
+        params.add(username);
+        User user = (User) BaseDao.queryRow(sql, params, User.class);
+        return user;
+    }
+
     /**
      * 根据用户名查询用户,用户名查询对象唯一
+     *
      * @param username
      * @return
      */
-    public User queryUserByName(String username) {
+    public User queryUserByName_re(String username) {
         User user = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -50,7 +61,7 @@ public class UserDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            DBUtil.close(resultSet, preparedStatement,connection);
+            DBUtil.close(resultSet, preparedStatement, connection);
         }
         return user;
     }

@@ -16,4 +16,6 @@ public class UserDaoTest {
         User user = userDao.queryUserByName("admin");
         System.out.println(user);
     }
+
+
 }
