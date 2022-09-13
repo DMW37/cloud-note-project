@@ -26,7 +26,25 @@ public class UserServlet extends HttpServlet {
         // 用户登录
         if ("login".equals(actionName)) {
             userLogin(request, response);
+        }else if ("logout".equals(actionName)){
+            userLogout(request,response);
         }
+    }
+
+    /**
+     *         1. 销毁Session对象
+     *         2. 删除Cookie对象
+     *         3. 重定向跳转到登录页面
+     * @param request
+     * @param response
+     */
+    private void userLogout(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().invalidate();
+        Cookie cookie = new Cookie("user",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        response.setStatus(302);
+        response.setHeader("location",request.getContextPath()+"/login.jsp");
     }
 
     /**
@@ -76,8 +94,8 @@ public class UserServlet extends HttpServlet {
                 response.addCookie(cookie);
             }
 
-            // 重定向跳转到index页面
-            response.sendRedirect("index.jsp");
+            // 重定向跳转到index页面,进入主页的控制器
+            response.sendRedirect("index");
         } else {
             // 失败
             // 将resultInfo对象设置到request作用域中

@@ -122,7 +122,8 @@ public class LoginAccessFilter implements Filter {
             }
         }
         // 拦截请求，重定向跳转到登录页面
-        response.sendRedirect("login.jsp");
+        String contextPath = request.getContextPath();
+        response.sendRedirect(contextPath+"/login.jsp");
     }
 
     @Override
