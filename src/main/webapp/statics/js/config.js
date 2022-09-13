@@ -93,5 +93,28 @@ $(function () {
 /**
  *
  * 校验表单
+ * 1.获取用户名和密码
+ * 2.判断用户名和密码是否符合规则
+ *      判空
+ * 3.如果不为空，提交表单
+ *
+ * 表单需要设置name属性
  */
+function checkLogin() {
+    //    1.获取用户名和密码 val() 获取表单的值,js是value通过value属性
+    var username = $("#username").val();
+    var password = $("#password").val();
+    //    2.判断用户名和密码是否符合规则
+    if (isEmpty(username)) {
+        $("#msg").html("用户名不能为空");
+        return
+    }
+    if (isEmpty(password)) {
+        $("#msg").html("密码不能为空");
+        return
+    }
+
+    //    3.如果不为空，提交表单
+    $("#loginForm").submit();
+}
 	

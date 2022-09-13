@@ -11,10 +11,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>云R记</title>
-    <link href="statics/css/login.css" rel="stylesheet" type="text/css"/>
+    <link href="statics/css/login.css" rel="stylesheet" type="text/css" />
     <script src="statics/js/jquery-1.11.3.js" type=text/javascript></script>
+    <script src="statics/js/util.js" type=text/javascript></script>
     <script src="statics/js/config.js" type=text/javascript></script>
-    <script src="statics/js/util.js" type="text/javascript"></script>
 
 </head>
 <body>
@@ -34,9 +34,9 @@
                 <form action="user" method="post" id="loginForm">
                     <%-- actionName表示用户行为，通过这个参数可以在UserServlet中判断用户当前想要操作的功能 --%>
                     <input type="hidden" name="actionName" value="login"/>
-                    <input type="text" class="user yahei16" name="username" id="UserName" value=""/>
+                    <input type="text" class="user yahei16" name="username" id="username" value=""/>
                     <br/><br/>
-                    <input type="password" class="pwd yahei16" name="password" id="UserPwd" value=""/>
+                    <input type="password" class="pwd yahei16" name="password" id="password" value=""/>
                     <br/><br/>
                     <input name="" type="checkbox" value="" class="inputcheckbox" value="1"/>
                     <label>记住我</label>&nbsp; &nbsp; <span id="msg" style="color: red;font-size: 12px"></span><br/><br/>
