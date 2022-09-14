@@ -44,5 +44,64 @@
             </div>
         </div>
     </div>
-
 </div>
+
+<script type="text/javascript">
+    /**
+     * 验证昵称的唯一性
+            昵称文本框的失焦事件  blur
+                 1. 获取昵称文本框的值
+                 2. 判断值是否为空
+                    如果为空，提示用户，禁用按钮，并return
+                3. 判断昵称是否做了修改
+                     从session作用域中获取用户昵称 （如果在js中想要使用el表达式获取域对象，js需要写在JSP页面中，无法在js文件中获取）
+                     如果用户昵称与session中的昵称一致，则return
+                 4. 如果昵称做了修改
+                     发送ajax请求后台，验证昵称是否可用
+                     如果不可用，提示用户，并禁用按钮
+                     如果可用，清空提示信息，按钮可用
+
+            昵称文本框的聚焦事件  focus
+                 1. 清空提示信息
+                 2. 按钮可用
+     */
+
+    $("#nickName").blur(()=>{
+        // 1.获取昵称文本的值
+        var nickName = $("#nickName").val();
+        if(isEmpty(nickName)){
+            $("#msg").text("用户昵称不能为空!");
+            $("#btn").prop("disabled",true);
+            return;
+        }
+        // 2.从session中获取值
+        var sessionNick = "${user.nick}";
+        if (nickName==sessionNick){
+            return;
+        }
+        // 3.ajax修改昵称
+        $.ajax({
+            url:"user",
+            type:"get",
+            data:{
+                actionName:"checkUniqueNick",
+                nick:nickName
+            },
+            success:function (result) {
+                if (result.code=='1'){
+                    // 清空提示信息，按钮可用
+                    $("#msg").text("");
+                    $("#btn").prop("disabled",false);
+                }else {
+                    $("#msg").text("该名称已存在，请重新输入!");
+                    $("#btn").prop("disabled",true);
+                }
+            }
+        })
+    }).focus(()=>{
+        $("#msg").text("");
+        $("#btn").prop("disabled",false);
+        return;
+    });
+
+</script>

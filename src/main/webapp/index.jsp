@@ -18,6 +18,7 @@
     <script src="statics/js/jquery-1.11.3.js"></script>
     <script src="statics/bootstrap/js/bootstrap.js"></script>
     <script src="statics/sweetalert/sweetalert2.min.js"></script>
+    <script src="statics/js/util.js" type="text/javascript"></script>
     <!-- 配置文件 -->
     <script type="text/javascript" src="statics/css/ueditor.config.js"></script>
     <!-- 编辑器源码文件 -->
