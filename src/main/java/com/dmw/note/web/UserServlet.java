@@ -4,6 +4,7 @@ package com.dmw.note.web;
 import com.dmw.note.po.User;
 import com.dmw.note.service.UserService;
 import com.dmw.note.vo.ResultInfo;
+import org.apache.commons.io.FileUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 @WebServlet("/user")
@@ -32,7 +34,31 @@ public class UserServlet extends HttpServlet {
             userLogout(request,response);
         }else if ("userCenter".equals(actionName)){
             userCenter(request,response);
+        }else if ("userHead".equals(actionName)){
+            userHead(request,response);
         }
+    }
+
+    /**
+     *   1. 获取参数 （图片名称）
+     *         2. 得到图片的存放路径 （request.getServletContext().getealPathR("/")）
+     *         3. 通过图片的完整路径，得到file对象
+     *         4. 通过截取，得到图片的后缀
+     *         5. 通过不同的图片后缀，设置不同的响应的类型
+     *         6. 利用FileUtils的copyFile()方法，将图片拷贝给浏览器
+     * @param request
+     * @param response
+     */
+    private void userHead(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String imageName = request.getParameter("imageName");
+        String realPath = getServletContext().getRealPath("/WEB-INF/upload/");
+        File file = new File(realPath+"/"+imageName);
+        // 获取文件MIME类型
+        String mimeType = getServletContext().getMimeType(imageName);
+        // 响应数据
+        response.setContentType(mimeType+";charset=UTF-8");
+        // 使用FileUtils.copyFile(),将图片传递给浏览器
+        FileUtils.copyFile(file,response.getOutputStream());
     }
 
     /**
