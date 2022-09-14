@@ -13,10 +13,10 @@
         <div class="container-fluid">
             <div class="row" style="padding-top: 20px;">
                 <div class="col-md-8">
-                    <form class="form-horizontal" method="post" action="user?act=save" enctype="multipart/form-data"
+                    <form class="form-horizontal" method="post" action="user" enctype="multipart/form-data"
                           onsubmit="return checkUser();">
                         <div class="form-group">
-                            <input type="hidden" name="act" value="save">
+                            <input type="hidden" name="actionName" value="updataUser">
                             <label for="nickName" class="col-sm-2 control-label">昵称:</label>
                             <div class="col-sm-3">
                                 <input class="form-control" name="nick" id="nickName" placeholder="昵称" value="${user.nick}">
@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" id="btn" class="btn btn-success">修改</button>&nbsp;&nbsp;<span
+                                <button type="submit" id="btn" class="btn btn-success" onclick="return updateUser()">修改</button>&nbsp;&nbsp;<span
                                     style="color:red" id="msg"></span>
                             </div>
                         </div>
@@ -104,4 +104,17 @@
         return;
     });
 
+    /**
+     *  表单提交条件
+     * @returns {boolean}
+     */
+    function updateUser() {
+        var nickName = $("#nickName").val();
+        if(isEmpty(nickName)){
+            $("#msg").text("用户昵称不能为空!");
+            $("#btn").prop("disabled",true);
+            return false;
+        }
+        return true;
+    }
 </script>

@@ -7,6 +7,9 @@ import com.dmw.note.po.User;
 import com.dmw.note.vo.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+
 @Slf4j
 public class UserService {
 
@@ -97,12 +100,89 @@ public class UserService {
         }
 
         int i = userDao.updateNickByUserId(userId, nick);
-        log.info("修改昵称:{}",i);
+        log.info("修改昵称:{}", i);
         if (i == 1) {
             return 1;
         } else {
             // 重新设置session中的user nick,刷新的时候马，因为这个没有变化
             return 0;
         }
+    }
+
+    /**
+     * 1. 获取参数（昵称、心情）
+     * 2. 参数的非空校验（判断必填参数非空）
+     * 如果昵称为空，将状态码和错误信息设置resultInfo对象中，返回resultInfo对象
+     * 3. 从session作用域中获取用户对象（获取用户对象中默认的头像）
+     * 4. 实现上上传文件
+     * 1. 获取Part对象 request.getPart("name"); name代表的是file文件域的name属性值
+     * 2. 通过Part对象获取上传文件的文件名
+     * 3. 判断文件名是否为空
+     * 4. 获取文件存放的路径  WEB-INF/upload/目录中
+     * 5. 上传文件到指定目录
+     * 5. 更新用户头像 （将原本用户对象中的默认头像设置为上传的文件名）
+     * 6. 调用Dao层的更新方法，返回受影响的行数
+     * 7. 判断受影响的行数
+     * 如果大于0，则修改成功；否则修改失败
+     * 8. 返回resultInfo对象
+     *
+     * @param request
+     * @return
+     */
+    public ResultInfo<User> updataUser(HttpServletRequest request) {
+        ResultInfo<User> resultInfo = new ResultInfo<>();
+//        1. 获取参数（昵称、心情）
+        String nick = request.getParameter("nick");
+        String mood = request.getParameter("mood");
+// 2. 参数的非空校验（判断必填参数非空）
+        if (StrUtil.isBlank(nick)) {
+            // 如果昵称为空，将状态码和错误信息设置resultInfo对象中，返回resultInfo对象
+            resultInfo.setCode(0).setMsg("用户昵称不能为空");
+            return resultInfo;
+        }
+
+        //3. 从session作用域中获取用户对象（获取用户对象中默认的头像）
+        User user = (User) request.getSession().getAttribute("user");
+        user.setNick(nick);
+        user.setMood(mood);
+        //4. 实现上上传文件
+        try {
+            //1. 获取Part对象 request.getPart("name"); name代表的是file文件域的name属性值
+            Part part = request.getPart("img");
+            String submittedFileName = part.getSubmittedFileName();
+            log.info("上传文件名:{}",submittedFileName);
+            // 2. 通过Part对象获取上传文件的文件名
+            String header = part.getHeader("content-disposition");
+            // 获取具体请求头值
+            String str = header.substring(header.lastIndexOf("=") + 2);
+            String fileName = str.substring(0, str.length() - 1);
+            // 3. 判断文件名是否为空
+            if (!StrUtil.isBlank(fileName)) {
+                user.setHead(fileName);
+                // 4. 获取文件存放的路径  WEB-INF/upload/目录中
+                // 5. 上传文件到指定目录,更新用户头像 （将原本用户对象中的默认头像设置为上传的文件名）
+                String realPath = request.getServletContext().getRealPath("/WEB-INF/upload/");
+                part.write(realPath + "/" + fileName);
+            }
+
+        } catch (Exception e) {
+
+        } finally {
+
+        }
+
+//        6. 调用Dao层的更新方法，返回受影响的行数
+       int row =  userDao.updateUser(user);
+//        7. 判断受影响的行数
+        if (row>0){
+            resultInfo.setCode(1).setResult(user).setMsg("修改成功");
+        }else {
+            resultInfo.setCode(0).setResult(user).setMsg("修改失败");
+            request.getSession().setAttribute("user",user);
+        }
+//        如果大于0，则修改成功；否则修改失败
+//        8. 返回resultInfo对象
+
+        return resultInfo;
     }
 }

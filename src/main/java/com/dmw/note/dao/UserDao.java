@@ -67,13 +67,14 @@ public class UserDao {
     }
 
     /**
-     *              1. 定义SQL语句
-     *                 通过用户ID查询除了当前登录用户之外是否有其他用户使用了该昵称
-     *                     指定昵称  nick （前台传递的参数）
-     *                     当前用户  userId （session作用域中的user对象）
-     *                     String sql = "select * from tb_user where nick = ? and userId != ?";
-     *             2. 设置参数集合
-     *             3. 调用BaseDao的查询方法
+     * 1. 定义SQL语句
+     * 通过用户ID查询除了当前登录用户之外是否有其他用户使用了该昵称
+     * 指定昵称  nick （前台传递的参数）
+     * 当前用户  userId （session作用域中的user对象）
+     * String sql = "select * from tb_user where nick = ? and userId != ?";
+     * 2. 设置参数集合
+     * 3. 调用BaseDao的查询方法
+     *
      * @param userId
      * @param nick
      * @return
@@ -91,6 +92,26 @@ public class UserDao {
         List params = new ArrayList();
         params.add(nick);
         params.add(userId);
-        return BaseDao.executeUpdate(sql,params);
+        return BaseDao.executeUpdate(sql, params);
+    }
+
+    /**
+     * 1. 定义SQL语句
+     * String sql = "update tb_user set nick = ?, mood = ?, head = ? where userId = ? ";
+     * 2. 设置参数集合
+     * 3. 调用BaseDao的更新方法，返回受影响的行数
+     * 4. 返回受影响的行数
+     *
+     * @param user
+     * @return
+     */
+    public int updateUser(User user) {
+        String sql = "update tb_user set nick = ?, mood = ?, head = ? where userId = ? ";
+        List params = new ArrayList();
+        params.add(user.getNick());
+        params.add(user.getMood());
+        params.add(user.getHead());
+        params.add(user.getUserId());
+        return BaseDao.executeUpdate(sql, params);
     }
 }

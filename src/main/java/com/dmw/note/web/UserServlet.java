@@ -7,6 +7,7 @@ import com.dmw.note.vo.ResultInfo;
 import org.apache.commons.io.FileUtils;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet("/user")
+@MultipartConfig
 public class UserServlet extends HttpServlet {
 
     private UserService userService = new UserService();
@@ -40,6 +42,26 @@ public class UserServlet extends HttpServlet {
         }else if ("checkUniqueNick".equals(actionName)){
             checkUniqueNick(request,response);
         }
+        else if ("updataUser".equals(actionName)){
+            updataUser(request,response);
+        }
+    }
+
+    /**
+     *    注：文件上传必须在Servlet类上提那家注解！！！ @MultipartConfig
+     *             1. 调用Service层的方法，传递request对象作为参数，返回resultInfo对象
+     *             2. 将resultInfo对象存到request作用域中
+     *             3. 请求转发跳转到个人中心页面 （user?actionName=userCenter）
+     * @param request
+     * @param response
+     */
+    private void updataUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        1. 调用Service层的方法，传递request对象作为参数，返回resultInfo对象
+        ResultInfo<User> resultInfo = userService.updataUser(request);
+//        2. 将resultInfo对象存到request作用域中
+        request.setAttribute("resultInfo",resultInfo);
+//        3. 请求转发跳转到个人中心页面 （user?actionName=userCenter）
+        request.getRequestDispatcher("user?actionName=userCenter").forward(request,response);
     }
 
     /**
