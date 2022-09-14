@@ -49,7 +49,7 @@ import java.io.IOException;
  *     如果以上判断都不满足，则拦截跳转到登录页面
  *
  */
-@WebFilter(value = "/*",dispatcherTypes = DispatcherType.REQUEST)
+@WebFilter(filterName = "a",value = "/*",dispatcherTypes = DispatcherType.REQUEST)
 public class LoginAccessFilter implements Filter {
     /**
      * 注意：需要重写init和destroy方法,资源才可以被释放

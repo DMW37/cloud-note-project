@@ -1,6 +1,7 @@
 package com.dmw.note.dao;
 
 import com.dmw.note.util.DBUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +20,7 @@ import java.util.List;
  * 2.查询集合
  * 3.查询某个对象
  */
+@Slf4j
 public class BaseDao {
 
     /**
@@ -54,6 +56,7 @@ public class BaseDao {
                     preparedStatement.setObject(i + 1, params.get(i));
                 }
             }
+
             // 执行更新，返回受影响的行数
             row = preparedStatement.executeUpdate();
         } catch (Exception e) {

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/user")
 public class UserServlet extends HttpServlet {
@@ -36,7 +37,38 @@ public class UserServlet extends HttpServlet {
             userCenter(request,response);
         }else if ("userHead".equals(actionName)){
             userHead(request,response);
+        }else if ("checkUniqueNick".equals(actionName)){
+            checkUniqueNick(request,response);
         }
+    }
+
+    /**
+     *             1. 获取参数（昵称）
+     *             2. 从session作用域获取用户对象，得到用户ID
+     *             3. 调用Service层的方法，得到返回的结果
+     *             4. 通过字符输出流将结果响应给前台的ajax的回调函数
+     *             5. 关闭资源
+     * @param request
+     * @param response
+     */
+    private void checkUniqueNick(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        1. 获取参数（昵称）
+        String nick = request.getParameter("nick");
+//        2. 从session作用域获取用户对象，得到用户ID
+        User user = (User) request.getSession().getAttribute("user");
+//        3. 调用Service层的方法，得到返回的结果
+       Integer code = userService.checkUniqueNick(user.getUserId(),nick);
+       if (code==1){
+           // 修改session
+           user.setNick(nick);
+           request.getSession().setAttribute("user",user);
+       }
+//        4. 通过字符输出流将结果响应给前台的ajax的回调函数
+        PrintWriter writer = response.getWriter();
+        writer.write(String.valueOf(code));
+//        5. 关闭资源
+        writer.close();
+
     }
 
     /**
@@ -50,15 +82,18 @@ public class UserServlet extends HttpServlet {
      * @param response
      */
     private void userHead(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String imageName = request.getParameter("imageName");
-        String realPath = getServletContext().getRealPath("/WEB-INF/upload/");
-        File file = new File(realPath+"/"+imageName);
-        // 获取文件MIME类型
-        String mimeType = getServletContext().getMimeType(imageName);
-        // 响应数据
-        response.setContentType(mimeType+";charset=UTF-8");
-        // 使用FileUtils.copyFile(),将图片传递给浏览器
-        FileUtils.copyFile(file,response.getOutputStream());
+        if (request.getSession().getAttribute("user")!=null){
+            String imageName = request.getParameter("imageName");
+            String realPath = getServletContext().getRealPath("/WEB-INF/upload/");
+            File file = new File(realPath+"/"+imageName);
+            // 获取文件MIME类型
+            String mimeType = getServletContext().getMimeType(imageName);
+            // 响应数据
+            response.setContentType(mimeType+";charset=UTF-8");
+            // 使用FileUtils.copyFile(),将图片传递给浏览器
+            FileUtils.copyFile(file,response.getOutputStream());
+        }
+
     }
 
     /**

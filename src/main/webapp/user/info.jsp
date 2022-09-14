@@ -88,7 +88,7 @@
                 nick:nickName
             },
             success:function (result) {
-                if (result.code=='1'){
+                if (result=='1'){
                     // 清空提示信息，按钮可用
                     $("#msg").text("");
                     $("#btn").prop("disabled",false);

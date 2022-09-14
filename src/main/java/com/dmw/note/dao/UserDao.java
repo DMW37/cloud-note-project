@@ -66,4 +66,31 @@ public class UserDao {
         return user;
     }
 
+    /**
+     *              1. 定义SQL语句
+     *                 通过用户ID查询除了当前登录用户之外是否有其他用户使用了该昵称
+     *                     指定昵称  nick （前台传递的参数）
+     *                     当前用户  userId （session作用域中的user对象）
+     *                     String sql = "select * from tb_user where nick = ? and userId != ?";
+     *             2. 设置参数集合
+     *             3. 调用BaseDao的查询方法
+     * @param userId
+     * @param nick
+     * @return
+     */
+    public User queryUserByUserIdAndNick(Integer userId, String nick) {
+        String sql = "select userId,nick from tb_user where userId = ? and nick = ?";
+        List params = new ArrayList();
+        params.add(userId);
+        params.add(nick);
+        return (User) BaseDao.queryRow(sql, params, User.class);
+    }
+
+    public int updateNickByUserId(Integer userId, String nick) {
+        String sql = "update tb_user set nick = ? where userId = ?";
+        List params = new ArrayList();
+        params.add(nick);
+        params.add(userId);
+        return BaseDao.executeUpdate(sql,params);
+    }
 }

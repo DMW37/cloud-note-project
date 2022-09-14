@@ -34,7 +34,7 @@ import java.io.IOException;
                 new String(request.getParamater("xxx").getBytes("ISO-8859-1"),"UTF-8");
 
  */
-@WebFilter(value = "/*",dispatcherTypes = DispatcherType.REQUEST) // 过滤所有资源
+@WebFilter(filterName = "b",value = "/*",dispatcherTypes = DispatcherType.REQUEST) // 过滤所有资源
 public class EncodingFilter implements Filter {
 
     @Override

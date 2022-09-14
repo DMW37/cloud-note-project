@@ -5,7 +5,9 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.dmw.note.dao.UserDao;
 import com.dmw.note.po.User;
 import com.dmw.note.vo.ResultInfo;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class UserService {
 
     private UserDao userDao = new UserDao();
@@ -68,5 +70,39 @@ public class UserService {
         // 正确
         resultInfo.setCode(1).setResult(user);
         return resultInfo;
+    }
+
+    /**
+     * 1. 判断昵称是否为空
+     * 如果为空，返回"0"
+     * 2. 调用Dao层，通过用户ID和昵称查询用户对象
+     * 3. 判断用户对象存在
+     * 存在，返回"0"
+     * 不存在，返回"1"
+     *
+     * @param userId
+     * @param nick
+     * @return
+     */
+    public Integer checkUniqueNick(Integer userId, String nick) {
+//        1. 判断昵称是否为空
+        if (StrUtil.isBlank(nick)) {
+            return 0;
+        }
+//        2. 调用Dao层，通过用户ID和昵称查询用户对象
+        User user = userDao.queryUserByUserIdAndNick(userId, nick);
+//        3. 判断用户对象存在
+        if (user != null) {
+            return 0;
+        }
+
+        int i = userDao.updateNickByUserId(userId, nick);
+        log.info("修改昵称:{}",i);
+        if (i == 1) {
+            return 1;
+        } else {
+            // 重新设置session中的user nick,刷新的时候马，因为这个没有变化
+            return 0;
+        }
     }
 }
