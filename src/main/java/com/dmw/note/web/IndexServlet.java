@@ -14,8 +14,11 @@ import java.io.IOException;
  */
 @WebServlet(name = "indexServlet", value = "/index")
 public class IndexServlet extends HttpServlet {
+
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 设置首页导航高亮
+        request.setAttribute("menu_page", "index");
         request.setAttribute("changePage", "note/list.jsp");
         request.getRequestDispatcher(request.getContextPath() + "/index.jsp").forward(request, response);
     }

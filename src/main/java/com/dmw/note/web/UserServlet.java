@@ -20,6 +20,8 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 设置首页导航高亮
+        request.setAttribute("menu_page","user");
         // 接收用户行为
         String actionName = request.getParameter("actionName");
         // 判断用户行为
@@ -28,7 +30,21 @@ public class UserServlet extends HttpServlet {
             userLogin(request, response);
         }else if ("logout".equals(actionName)){
             userLogout(request,response);
+        }else if ("userCenter".equals(actionName)){
+            userCenter(request,response);
         }
+    }
+
+    /**
+     * 进入个人中心
+     *  1.设置首页包含的页面值
+     *  2.请求转发到index
+     * @param request
+     * @param response
+     */
+    private void userCenter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("changePage",request.getContextPath()+"/user/info.jsp");
+        request.getRequestDispatcher("index.jsp").forward(request,response);
     }
 
     /**
