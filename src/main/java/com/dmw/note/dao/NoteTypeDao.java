@@ -32,4 +32,37 @@ public class NoteTypeDao {
         // 4. 返回集合
         return list;
     }
+
+    /**
+     * 通过类型ID删除指定的类型记录，返回受影响的行数
+     * @param typeId
+     * @return
+     */
+    public int deleteTypeById(String typeId) {
+        // 定义SQL语句
+        String sql = "delete from tb_note_type where typeId = ?";
+        // 设置参数集合
+        List<Object> params = new ArrayList<>();
+        params.add(typeId);
+        // 调用BaseDao
+        int row = BaseDao.executeUpdate(sql, params);
+        return row;
+    }
+
+    /**
+     * 通过类型ID查询云记记录的数量，返回云记数量
+     *
+     * @param typeId
+     * @return
+     */
+    public long findNoteCountByTypeId(String typeId) {
+        // 定义SQL语句
+        String sql = "select count(1) from tb_note where typeId = ?";
+        // 设置参数集合
+        List<Object> params = new ArrayList<>();
+        params.add(typeId);
+        // 调用BaseDao
+        long count = (long) BaseDao.findSingleValue(sql, params);
+        return count;
+    }
 }

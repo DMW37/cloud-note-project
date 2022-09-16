@@ -3,6 +3,8 @@ package com.dmw.note.web;
 import com.dmw.note.po.NoteType;
 import com.dmw.note.po.User;
 import com.dmw.note.service.NoteTypeService;
+import com.dmw.note.util.JsonUtil;
+import com.dmw.note.vo.ResultInfo;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,11 +35,28 @@ public class NoteTypeServlet extends HttpServlet {
             typeList(request, response);
         } else if ("delete".equals(actionName)) {
             // 删除类型
-            // deleteType(request, response);
+            deleteType(request, response);
         } else if ("addOrUpdate".equals(actionName)) {
             // 添加或修改类型
             //  addOrUpdate(request, response);
         }
+    }
+
+    /**
+     * 删除类型
+     1. 接收参数（类型ID）
+     2. 调用Service的更新操作，返回ResultInfo对象
+     3. 将ResultInfo对象转换成JSON格式的字符串，响应给ajax的回调函数
+     * @param request
+     * @param response
+     */
+    private void deleteType(HttpServletRequest request, HttpServletResponse response) {
+        // 1. 接收参数（类型ID）
+        String typeId = request.getParameter("typeId");
+        // 2. 调用Service的更新操作，返回ResultInfo对象
+        ResultInfo<NoteType> resultInfo = noteTypeService.deleteType(typeId);
+        // 3. 将ResultInfo对象转换成JSON格式的字符串，响应给ajax的回调函数
+        JsonUtil.toJson(response, resultInfo);
     }
 
     /**
