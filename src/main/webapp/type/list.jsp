@@ -17,13 +17,14 @@
 		</span>
 
         </div>
-        <div>
+
+        <div id="myDiv">
             <c:if test="${empty typeList}">
                 <h2>暂时未查询到类型数据</h2>
             </c:if>
 
             <c:if test="${!empty typeList}">
-                <table class="table table-hover table-striped ">
+                <table id="myTable" class="table table-hover table-striped ">
                     <tbody>
                     <tr>
                         <th>编号</th>
@@ -36,7 +37,9 @@
                             <th>${item.typeName}</th>
                             <td>
                                 <button class="btn btn-primary" type="button">修改</button>&nbsp;
-                                <button class="btn btn-danger del" type="button">删除</button>
+                                <button class="btn btn-danger del" type="button" onclick="deleteType(${item.typeId})">
+                                    删除
+                                </button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -73,3 +76,5 @@
         </div>
     </div>
 </div>
+<%--src 需要根据你被包含的数据页面位置为标准--%>
+<script type="text/javascript" src="statics/js/type.js"></script>
